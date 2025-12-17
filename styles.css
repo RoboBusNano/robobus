@@ -83,7 +83,7 @@ header.header-bus {
         padding: 10px 20px;
         font-size: 14px;
     }
-}
+    }
 }
 
 .logo {
@@ -759,6 +759,7 @@ footer::before {
 .tarjeta h2 {
   color: #0d47a1;
 }
+
 
 
 
