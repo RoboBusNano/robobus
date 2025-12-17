@@ -299,8 +299,8 @@ footer::before {
 .team-member p {
     color: var(--text-color);
     min-height: 80px;
-    margin-bottom: 0.5rem;   
-    line-height: 1.4;        
+    margin-bottom: 0.4rem;   
+    line-height: 1.2;        
 }
 
 .social-links {
@@ -759,6 +759,7 @@ footer::before {
 .tarjeta h2 {
   color: #0d47a1;
 }
+
 
 
 
