@@ -241,7 +241,7 @@ footer::before {
     color: var(--text-color);
     line-height: 1.6;
     margin-bottom: 1.5rem;
-    min-height: 80px;
+    min-height: 40px;
 }
 
 .social-links {
@@ -700,3 +700,4 @@ footer::before {
 .tarjeta h2 {
   color: #0d47a1;
 }
+
