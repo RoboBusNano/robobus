@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programación - RoboBus Nano</title>
+  <title>Programación - RoboBusNano</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -42,39 +42,6 @@
         El RoboBus Nano fue programado utilizando el entorno de desarrollo Arduino IDE.
         El código permite controlar el movimiento del bus mediante los motores DC.
       </p>
-
-      <pre class="codigo">
-<code>
-// Pines de los motores
-int motorA1 = 2;
-int motorA2 = 3;
-int motorB1 = 4;
-int motorB2 = 5;
-
-void setup() {
-  pinMode(motorA1, OUTPUT);
-  pinMode(motorA2, OUTPUT);
-  pinMode(motorB1, OUTPUT);
-  pinMode(motorB2, OUTPUT);
-}
-
-void loop() {
-  // Avanzar
-  digitalWrite(motorA1, HIGH);
-  digitalWrite(motorA2, LOW);
-  digitalWrite(motorB1, HIGH);
-  digitalWrite(motorB2, LOW);
-  delay(2000);
-
-  // Detener
-  digitalWrite(motorA1, LOW);
-  digitalWrite(motorA2, LOW);
-  digitalWrite(motorB1, LOW);
-  digitalWrite(motorB2, LOW);
-  delay(1000);
-}
-</code>
-      </pre>
     </section>
 
     <!-- FUNCIONAMIENTO -->
