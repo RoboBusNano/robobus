@@ -21,10 +21,69 @@ body {
 
 /* Header */
 header {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-    padding: 1.5rem;
+   /* --- ESTILO EXACTO DE BOTONES AZULES --- */
+
+header.header-bus {
+    background: linear-gradient(135deg, #172e57 0%, #1ea1da 100%); /* Fondo degradado azul */
+    padding: 2rem 1rem;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    margin-bottom: 2rem;
+}
+
+.logo {
+    width: 140px; /* Tamaño controlado del logo */
+    height: auto;
+    background: white; /* Si el logo es PNG transparente, esto le da el fondo blanco cuadrado de la foto */
+    padding: 10px;
+}
+
+.menu-principal {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px; /* Espacio entre botones */
+}
+
+.menu-principal a {
+    text-decoration: none;
+    color: white !important;
+    background-color: #0077cc; /* Azul brillante de la foto */
+    padding: 12px 30px;
+    border-radius: 50px; /* Hace que sean cápsulas redondas */
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    /* Sombra suave en la parte inferior */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: none;
+    display: inline-block;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+.menu-principal a:hover {
+    background-color: #005fa3;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Efecto cuando el botón está activo o seleccionado (Opcional) */
+.menu-principal a:active {
+    transform: translateY(0);
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .menu-principal {
+        gap: 10px;
+    }
+    .menu-principal a {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
 }
 
 .logo {
@@ -700,5 +759,6 @@ footer::before {
 .tarjeta h2 {
   color: #0d47a1;
 }
+
 
 
