@@ -675,4 +675,28 @@ footer::before {
     background: #3EB4AC;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+}
+.contenido {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.descripcion {
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.tarjeta {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.tarjeta h2 {
+  color: #0d47a1;
 }
