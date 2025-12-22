@@ -3,66 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programación - RoboBus Nano</title>
+  <title>Programaci贸n - RoboBus Nano</title>
   <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-
   <!-- HEADER -->
-  <header>
-    <div class="header-container">
-      <div class="logo-container">
-        <img src="image/logo.jpg" alt="Logo" class="logo">
-      </div>
-
-      <nav>
-        <a href="index.html">Inicio</a>
-        <a href="nosotros.html">Nuestro Equipo</a>
-        <a href="construccion.html">Construcción</a>
-        <a href="programacion.html">Programación</a>
-        <a href="contacto.html">Contáctanos</a>
-      </nav>
-    </div>
+  <header class="header">
+    <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
+    <nav class="nav-center">
+      <a href="index.html">Inicio</a>
+      <a href="nosotros.html">Equipo</a>
+      <a href="construccion.html">Construcci贸n</a>
+      <a href="programacion.html">Programaci贸n</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="contenido">
+ 
+<main class="contenido">
 
-    <h1>💻 Programación y Funcionamiento</h1>
-    <p class="descripcion">
-      En esta sección se explica el código utilizado en Arduino y cómo funciona
-      el RoboBus Nano.
-    </p>
+  <div class="arduino-hero-center">
+  <h1>馃捇 Programaci贸n y Funcionamiento</h1>
+  <p class="descripcion">
+    Aqu铆 te explicamos c贸mo programamos el RoboBus Nano y c贸mo funciona paso a paso.
+  </p>
+  </div>
 
-    <!-- PROGRAMACIÓN -->
-    <section class="tarjeta">
-      <h2>💻 Programación</h2>
-      <p>
-        El RoboBus Nano fue programado utilizando el entorno de desarrollo Arduino IDE.
-        El código permite controlar el movimiento del bus mediante los motores.
-      </p>
-    </section>
+  <!-- GRID DE CARDS ARDUINO -->
+  <div class="arduino-grid">
+    <!-- CARD 1: C贸digo -->
+    <div class="arduino-card">
+      <h3>C贸digo ejemplo</h3>
+      <p>Control de motores y sensor de distancia con Arduino Nano.</p>
+      <pre class="code-block">
+#include &lt;NewPing.h&gt;
+NewPing sonar(TRIG_PIN, ECHO_PIN, 200);
 
-    <!-- FUNCIONAMIENTO -->
-    <section class="tarjeta">
-      <h2>⚙️ Funcionamiento</h2>
-      <ul>
-        <li>Al encender el sistema, el Arduino ejecuta el programa.</li>
-        <li>Los motores se activan para mover el bus hacia adelante y hacia atrás.</li>
-        <li>El bus se detiene si su sensor detecta algun objeto a una distancia específica.</li>
-        <li>Funciona a través de comandos.</li>
-        <li>Se puede manejar por bluetooth mediante un dispositivo (celular - PC)</li>
-        <li>El proceso se repite continuamente.</li>
-      </ul>
-    </section>
+void loop() {
+  int cm = sonar.ping_cm();
+  if (cm > 15) moverAdelante();
+  else detener();
+}
+      </pre>
+    </div>
 
-  </main>
+    <!-- CARD 2: Paso 1 -->
+    <div class="arduino-card">
+      <h3>1. Configuraci贸n inicial</h3>
+      <p>Define pines, bibliotecas y variables globales.</p>
+    </div>
 
+    <!-- CARD 3: Paso 2 -->
+    <div class="arduino-card">
+      <h3>2. Lectura de sensores</h3>
+      <p>El sensor ultras贸nico mide la distancia cada 100 ms.</p>
+    </div>
+
+    <!-- CARD 4: Paso 3 -->
+    <div class="arduino-card">
+      <h3>3. Control por Bluetooth</h3>
+      <p>Recibe comandos desde el celular y ejecuta acciones.</p>
+    </div>
+
+    <!-- CARD 5: Descarga -->
+    <div class="arduino-card download-card">
+      <h3>馃摜 Descarga</h3>
+      <p>Obt茅n el archivo .ino completo.</p>
+      <a href="files/roboBusNano.ino" download class="download-btn-arduino">
+        <ion-icon name="download-outline"></ion-icon> roboBusNano.ino
+      </a>
+    </div>
+  </div>
+</main>
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 RoboBus Nano</p>
+    <p>&copy; 2025 RoboBus Nano</p>
   </footer>
 
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
