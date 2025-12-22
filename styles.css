@@ -1,766 +1,587 @@
 :root {
-    --primary-color: #172e57;
-    --secondary-color: #0077cc;
-    --accent-color: #1ea1da;
-    --text-color: #000000;
-    --background: #77c7f5;
+  --primary: #005f99;
+  --secondary: #ff8c00;
+  --background: #f0f8ff;
+  --text: #222;
+  --white: #ffffff;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background);
-    color: var(--text-color);
-    line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+}
+/* Header: logo a la izquierda, menú centrado */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #005f99, #0077cc);
 }
 
-/* Header */
-header {
-   /* --- ESTILO EXACTO DE BOTONES AZULES --- */
-
-header.header-bus {
-    background: linear-gradient(135deg, #172e57 0%, #1ea1da 100%); /* Fondo degradado azul */
-    padding: 2rem 1rem;
-    text-align: center;
+.logo-left {
+  width: 100px;
+  background: white;
+  padding: 8px;
+  border-radius: 10px;
 }
 
-.logo-container {
-    margin-bottom: 2rem;
+.nav-center {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  flex: 1;
 }
 
-.logo {
-    width: 140px; /* Tamaño controlado del logo */
-    height: auto;
-    background: white; /* Si el logo es PNG transparente, esto le da el fondo blanco cuadrado de la foto */
-    padding: 10px;
+.nav-center a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: background 0.3s ease;
 }
 
-.menu-principal {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px; /* Espacio entre botones */
+.nav-center a:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.menu-principal a {
-    text-decoration: none;
-    color: white !important;
-    background-color: #0077cc; /* Azul brillante de la foto */
-    padding: 12px 30px;
-    border-radius: 50px; /* Hace que sean cápsulas redondas */
-    font-weight: bold;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    /* Sombra suave en la parte inferior */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border: none;
-    display: inline-block;
-}
-
-/* Efecto al pasar el mouse (Hover) */
-.menu-principal a:hover {
-    background-color: #005fa3;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-}
-
-/* Efecto cuando el botón está activo o seleccionado (Opcional) */
-.menu-principal a:active {
-    transform: translateY(0);
-}
-
-/* Ajuste para móviles */
-@media (max-width: 768px) {
-    .menu-principal {
-        gap: 10px;
-    }
-    .menu-principal a {
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-    }
-}
-
-.logo {
-    width: 150px;
-    height: auto;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-nav a {
-    text-decoration: none;
-    color: white;
-    background-color: var(--secondary-color);
-    padding: 0.8rem 1.8rem;
-    border-radius: 30px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-}
-
-nav a:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    background-color: #FF5252;
-}
-
-/* Main Content */
-main {
-    max-width: 1200px;
-    margin: 3rem auto;
-    padding: 0 1.5rem;
-}
-
-.card {
-    background: white;
-    border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-h1 {
-    color: var(--primary-color);
-    font-size: 2.8rem;
-    margin-bottom: 1.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    color: var(--text-color);
-    font-size: 1.2rem;
-    line-height: 1.8;
-    max-width: 800px;
-    margin: 2rem auto;
-}
-
-/* Image Container */
-.image-container {
-    margin: 3rem 0;
-    position: relative;
-}
-
-.animated-image {
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid white;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-25px) rotate(3deg); }
-    100% { transform: translateY(0px) rotate(0deg); }
-}
-
-/* Footer */
-footer {
-    background: var(--primary-color);
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    margin-top: 4rem;
-    position: relative;
-}
-
-footer::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 0;
-    right: 0;
-    height: 10px;
-    background: linear-gradient(to right, var(--secondary-color), var(--accent-color));
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .logo {
-        width: 120px;
-    }
-    
-    nav a {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    .animated-image {
-        width: 300px;
-        height: 300px;
-    }
-    
-    .card {
-        padding: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .animated-image {
-        width: 250px;
-        height: 250px;
-    }
-    
-    h1 {
-        font-size: 1.8rem;
-    }
-    
-    h2 {
-        font-size: 1rem;
-    }
-}
+/* Tarjetas estilo LinkedIn */
 .team-section {
-    padding: 4rem 0;
-    text-align: center;
-}
-
-.team-section h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  padding: 3rem 1rem;
+  text-align: center;
 }
 
 .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.team-member {
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.team-member:hover {
-    transform: translateY(-10px);
-}
-
-.member-photo {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--accent-color);
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.team-member:hover .member-photo {
-    transform: scale(1.05);
-}
-
-.team-member h3 {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-}
-
-.team-member h4 {
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.team-member p {
-    color: var(--text-color);
-    min-height: 80px;
-    margin-bottom: 0.4rem;   
-    line-height: 1.2;        
-}
-
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.social-links a {
-    color: white;
-    background: var(--secondary-color);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.social-links a:hover {
-    background: var(--primary-color);
-    transform: translateY(-3px);
-}
-
-.social-links ion-icon {
-    font-size: 1.4rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .team-section h1 {
-        font-size: 2rem;
-    }
-    
-    .member-photo {
-        width: 180px;
-        height: 180px;
-    }
-}
-
-@media (max-width: 480px) {
-    .team-member {
-        padding: 1.5rem;
-    }
-    
-    .member-photo {
-        width: 150px;
-        height: 150px;
-    }
-}
-
-.contact-section {
-    padding: 4rem 0;
-    text-align: center;
-}
-
-.contact-section h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-}
-
-.contact-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    position: relative;
-}
-
-.contact-form {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: var(--accent-color);
-    outline: none;
-}
-
-.submit-btn {
-    background: var(--secondary-color);
-    color: white;
-    padding: 1rem 2.5rem;
-    border: none;
-    border-radius: 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-}
-
-.submit-btn:hover {
-    background: #FF5252;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-}
-
-.whatsapp-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #25D366;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.whatsapp-btn ion-icon {
-    color: white;
-    font-size: 2rem;
-}
-
-.whatsapp-btn:hover {
-    transform: scale(1.1) rotate(15deg);
-    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .contact-form {
-        padding: 1.5rem;
-    }
-    
-    .whatsapp-btn {
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-    }
-    
-    .whatsapp-btn ion-icon {
-        font-size: 1.8rem;
-    }
-}
-.downloads-section {
-    padding: 4rem 0;
-    text-align: center;
-}
-
-.downloads-section h1 {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-}
-
-.downloads-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-}
-
-.download-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    border-left: 5px solid var(--accent-color);
-}
-
-.download-card:hover {
-    transform: translateY(-5px);
-}
-
-.download-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.download-icon {
-    font-size: 2.5rem;
-    color: var(--secondary-color);
-    margin-right: 1rem;
-    flex-shrink: 0;
-}
-
-.file-info h3 {
-    color: var(--primary-color);
-    margin-bottom: 0.3rem;
-    text-align: left;
-}
-
-.file-details {
-    color: #666;
-    font-size: 0.9rem;
-    text-align: left;
-}
-
-.file-description {
-    color: var(--text-color);
-    line-height: 1.6;
-    margin: 1rem 0;
-    text-align: left;
-    min-height: 60px;
-}
-
-.download-btn {
-    display: inline-flex;
-    align-items: center;
-    background: var(--secondary-color);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    margin-top: 1rem;
-}
-
-.download-btn ion-icon {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-}
-
-.download-btn:hover {
-    background: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .downloads-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .download-card {
-        padding: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .download-icon {
-        font-size: 2rem;
-    }
-    
-    .file-info h3 {
-        font-size: 1.2rem;
-    }
-}
-
-
-/* Contact Section */
-.contact-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    padding: 4rem 0;
-}
-
-.whatsapp-container {
-    background: white;
-    padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.whatsapp-message {
-    color: var(--text-color);
-    font-size: 1.2rem;
-    margin: 2rem 0;
-    line-height: 1.6;
-}
-
-.whatsapp-icon {
-    background: #25D366;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-    transition: all 0.3s ease;
-}
-
-.whatsapp-icon ion-icon {
-    color: white;
-    font-size: 2.5rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .whatsapp-container {
-        padding: 2rem;
-        margin: 0 1.5rem;
-    }
-    
-    .whatsapp-message {
-        font-size: 1rem;
-    }
-    
-    .whatsapp-icon {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .whatsapp-icon ion-icon {
-        font-size: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo {
-        width: 120px;
-    }
-    
-    nav a {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* Estilos para el visor de PDF */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-}
-
-.modal-content {
-    position: relative;
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 30px;
-    width: 90%;
-    max-width: 1000px;
-    border-radius: 10px;
-    animation: modalOpen 0.3s ease;
-}
-
-@keyframes modalOpen {
-    from {transform: scale(0.8); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
-}
-
-.close-btn {
-    position: absolute;
-    right: 25px;
-    top: 15px;
-    color: var(--text-color);
-    font-size: 35px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-    color: var(--secondary-color);
-}
-
-#pdfViewer {
-    width: 100%;
-    height: 80vh;
-    border-radius: 8px;
-}
-
-/* Contenedor de botones */
-.button-container {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.view-btn {
-    display: inline-flex;
-    align-items: center;
-    background: var(--accent-color);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.view-btn ion-icon {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-}
-
-.view-btn:hover {
-    background: #3EB4AC;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-
-}
-.contenido {
-  max-width: 1000px;
-  margin: 60px auto;
-  padding: 20px;
-}
-
-.descripcion {
-  font-size: 18px;
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.tarjeta {
+.linkedin-card {
   background: white;
-  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 280px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.linkedin-card:hover {
+  transform: translateY(-5px);
+}
+
+.linkedin-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid #0077cc;
+}
+
+.linkedin-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #005f99;
+}
+
+.linkedin-role {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.linkedin-bio {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.linkedin-btn {
+  background: #0077cc;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.linkedin-btn:hover {
+  background: #005f99;
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.hero-content {
+  flex: 1 1 400px;
+  padding: 1rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.objetivo {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background: var(--secondary);
+  color: var(--white);
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+.hero-image {
+  flex: 1 1 300px;
+  text-align: center;
+}
+
+.animated-image {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.info-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+}
+
+.card {
+  background: var(--white);
+  padding: 2rem;
   border-radius: 15px;
-  margin-bottom: 40px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 280px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 0.3s ease;
 }
 
-.tarjeta h2 {
-  color: #0d47a1;
+.card:hover {
+  transform: translateY(-5px);
 }
 
+footer {
+  background: var(--primary);
+  color: var(--white);
+  text-align: center;
+  padding: 1.5rem;
+}
 
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
 
+  .nav-menu {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+/* --------------  GRID ARDUINO  -------------- */
+.arduino-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-areas:
+    "code   code"
+    "step1  step2"
+    "step3  download";
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
 
+.arduino-grid > .tarjeta {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+}
 
+/* fondo patrón circuito (sutil) */
+.arduino-grid > .tarjeta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300a9d6' stroke-width='1.2' opacity='.08'%3E%3Cpath d='M40 0v80M0 40h80M20 20h40v40H20z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* áreas específicas */
+.arduino-code   { grid-area: code; }
+.arduino-step1  { grid-area: step1; }
+.arduino-step2  { grid-area: step2; }
+.arduino-step3  { grid-area: step3; }
+.arduino-dwl    { grid-area: download; }
+
+/* bloque de código */
+.code-block {
+  background: #1e1e1e;
+  color: #00ff00;
+  padding: 1.2rem 1.5rem;
+  border-left: 4px solid #00a9d6;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+/* títulos con color Arduino */
+.arduino-grid h3 {
+  color: #0072b2;
+  margin-bottom: .8rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.arduino-grid h3::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #ff7a00;
+  border-radius: 50%;
+}
+
+/* botón estilo IDE Arduino */
+.download-btn-arduino {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: #ff7a00;
+  color: #fff;
+  padding: .7rem 1.4rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: .95rem;
+  transition: background .3s ease;
+}
+.download-btn-arduino:hover {
+  background: #e56e00;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .arduino-grid {
+    grid-template-areas:
+      "code"
+      "step1"
+      "step2"
+      "step3"
+      "download";
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------  CARDS ARDUINO  -------------- */
+.arduino-grid {
+  display: grid;
+  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.arduino-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.arduino-card:hover {
+  transform: translateY(-5px);
+}
+
+/* patrón circuito sutil */
+.arduino-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300a9d6' stroke-width='1.2' opacity='.08'%3E%3Cpath d='M40 0v80M0 40h80M20 20h40v40H20z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.arduino-card h3 {
+  color: #0072b2;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arduino-card h3::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #ff7a00;
+  border-radius: 50%;
+}
+
+.arduino-card p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* bloque código IDE */
+.code-block {
+  background: #1e1e1e;
+  color: #00ff00;
+  padding: 1rem 1.2rem;
+  border-left: 4px solid #00a9d6;
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  border-radius: 6px;
+  margin-top: 0.8rem;
+}
+
+/* card descarga */
+.download-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.download-btn-arduino {
+  align-self: center;
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ff7a00;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.download-btn-arduino:hover {
+  background: #e56e00;
+}
+
+/* --------------  CARDS ARDUINO  -------------- */
+.arduino-grid {
+  display: grid;
+  gap: 1.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.arduino-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.8rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.arduino-card:hover {
+  transform: translateY(-5px);
+}
+
+/* patrón circuito sutil */
+.arduino-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2300a9d6' stroke-width='1.2' opacity='.08'%3E%3Cpath d='M40 0v80M0 40h80M20 20h40v40H20z'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.arduino-card h3 {
+  color: #0072b2;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arduino-card h3::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #ff7a00;
+  border-radius: 50%;
+}
+
+.arduino-card p,
+.arduino-card ul {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* lista de materiales */
+.lista-materiales {
+  columns: 2;
+  gap: 1.5rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.lista-materiales li {
+  margin-bottom: 0.4rem;
+}
+
+/* imagen dentro de card */
+.arduino-img {
+  width: 100%;
+  max-width: 600px;
+  margin: 0.8rem auto 0;
+  display: block;
+  border-radius: 8px;
+}
+
+/* card que ocupa todo el ancho */
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* responsive */
+@media (max-width: 600px) {
+  .lista-materiales {
+    columns: 1;
+  }
+}
+/* --------------  VIDEO RESPONSIVE  -------------- */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.arduino-hero-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical */
+  align-items: center;     /* horizontal */
+  min-height: 40vh;        /* altura completa viewport (ajusta si quieres) */
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.arduino-hero-center h1 {
+  margin-bottom: 1rem;
+}
+/*  CENTRADO TOTAL  */
+.contact-hero-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  text-align: center;
+  padding: 0 1rem;
+}
+.contact-hero-center h1 { margin-bottom: 1rem; }
+
+/*  BOTÓN WHATSAPP XL  */
+.btn-contact-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 4rem;
+}
+
+.btn-whatsapp-xl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #25D366;
+  color: #fff;
+  padding: 1rem 2.2rem;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+  transition: all 0.3s ease;
+}
+
+.btn-whatsapp-xl:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.45);
+}
+
+.btn-whatsapp-xl ion-icon {
+  font-size: 1.7rem;
+}
