@@ -1,98 +1,64 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenidos a RoboBus Nano</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RoboBus Nano - Proyecto Educativo con Arduino</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<base target="_blank">
 </head>
 <body>
-    <header class="header-bus">
-        <div class="logo-container">
-        <img src="image/logo.jpg" alt="Logo" class="logo">
-        </div>
-        <nav class="menu-principal">
-        <a href="index.html">Inicio</a>
-        <a href="nosotros.html">Nuestro Equipo</a>
-        <a href="construccion.html">Construcción</a>
-        <a href="programacion.html">Programación</a>
-        <a href="contacto.html">Contáctanos</a>
-        </nav>
-    </header>
+<header class="header">
+    <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
+    <nav class="nav-center">
+      <a href="index.html">Inicio</a>
+      <a href="nosotros.html">Equipo</a>
+      <a href="construccion.html">Construcci贸n</a>
+      <a href="programacion.html">Programaci贸n</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
 
-    <main>
-        <section id="cadenas" class="card">
-            <div class="image-container">
-                <img src="image/bus.jpg" 
-                     alt="Programación" 
-                     class="animated-image" 
-                     id="mainImage">
-            </div>
-            <h1>RoboBus Nano 🚀</h1>
-            <h2>Objetivo:</h2>
-            <h2>Desarrollar un prototipo robótico en forma de bus escolar, utilizando componentes electrónicos y programación en Arduino, que permita aplicar los conocimientos de los módulos de Electricidad y Electrónica de la nueva Figura Profesional de Soporte Informático, fortaleciendo el aprendizaje práctico y tecnológico de los estudiantes.
-                ¡Acompáñanos en este viaje de aprendizaje y desarrollo!</h2>
-                      
-        </section>
-    </main>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>RoboBus Nano 馃殌</h1>
+        <p class="objetivo">
+          Desarrollamos un prototipo rob贸tico en forma de bus escolar con Arduino.
+          Ideal para estudiantes que est谩n aprendiendo sobre electr贸nica y programaci贸n.
+        </p>
+        <button class="cta-button" onclick="scrollToSection()">Conoce m谩s</button>
+      </div>
+      <div class="hero-image">
+        <img src="image/logo.jpg" alt="RoboBus Nano" class="animated-image">
+      </div>
+    </section>
 
-    <footer>
-          <p>© 2025 RoboBus Nano</p>
-    </footer>
+    <section class="info-cards">
+      <div class="card">
+        <h3>馃攲 Funcionamiento</h3>
+        <p>Aprende conectando sensores, motores y placas Arduino en un entorno real.</p>
+      </div>
+      <div class="card">
+        <h3>馃捇 Programaci贸n</h3>
+        <p>Controla el comportamiento del bus con c贸digo sencillo y did谩ctico.</p>
+      </div>
+      <div class="card">
+        <h3>馃洜锔?Construcci贸n</h3>
+        <p>Dise帽a y monta tu propio robot con materiales accesibles y herramientas escolares.</p>
+      </div>
+    </section>
+  </main>
 
-    <script>
-        // Animación de la imagen central
-        const image = document.getElementById('mainImage');
-        let animationPaused = false;
+  <footer>
+    <p>&copy; 2025 RoboBus Nano - Proyecto Educativo</p>
+  </footer>
 
-        image.addEventListener('mouseover', () => {
-            if(!animationPaused) {
-                image.style.animationPlayState = 'paused';
-            }
-        });
-
-        image.addEventListener('mouseout', () => {
-            if(!animationPaused) {
-                image.style.animationPlayState = 'running';
-            }
-        });
-
-        image.addEventListener('click', () => {
-            image.style.transform = 'scale(1.15) rotate(5deg)';
-            setTimeout(() => {
-                image.style.transform = 'scale(1) rotate(0deg)';
-            }, 500);
-            
-            // Efecto de partículas
-            const particles = document.createElement('div');
-            particles.style.position = 'absolute';
-            particles.style.width = '10px';
-            particles.style.height = '50px';
-            particles.style.background = 'radial-gradient(circle, var(--secondary-color), transparent)';
-            particles.style.borderRadius = '50%';
-            particles.style.animation = 'particle 1s ease-out';
-            
-            const rect = image.getBoundingClientRect();
-            particles.style.left = `${rect.left + rect.width/2}px`;
-            particles.style.top = `${rect.top + rect.height/2}px`;
-            
-            document.body.appendChild(particles);
-            
-            setTimeout(() => {
-                particles.remove();
-            }, 1000);
-            
-            animationPaused = !animationPaused;
-            image.style.animationPlayState = animationPaused ? 'paused' : 'running';
-        });
-
-        window.addEventListener('load', () => {
-            image.style.opacity = '1';
-            image.style.transform = 'translateY(0)';
-        });
-    </script>
+  <script>
+    function scrollToSection() {
+      document.querySelector('.info-cards').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
 </body>
-
 </html>
-
-
