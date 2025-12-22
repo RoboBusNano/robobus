@@ -1,87 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Construcción - RoboBus Nano</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Construcci贸n - RoboBus Nano</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
-  <!-- HEADER -->
-  <header>
-    <div class="header-container">
-      <div class="logo-container">
-        <img src="image/logo.jpg" alt="Logo" class="logo">
-      </div>
-
-      <nav>
-        <a href="index.html">Inicio</a>
-        <a href="nosotros.html">Nuestro Equipo</a>
-        <a href="construccion.html">Construcción</a>
-        <a href="programacion.html">Programación</a>
-        <a href="contacto.html">Contáctanos</a>
-      </nav>
-    </div>
+  <header class="header">
+    <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
+    <nav class="nav-center">
+      <a href="index.html">Inicio</a>
+      <a href="nosotros.html">Equipo</a>
+      <a href="construccion.html">Construcci贸n</a>
+      <a href="programacion.html">Programaci贸n</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
   </header>
+<main class="contenido">
+  
+ <div class="arduino-hero-center">
+  <h1>馃敡 Construcci贸n del RoboBus Nano</h1>
+  <p class="descripcion">
+    Paso a paso y materiales que usamos para construir el RoboBus Nano con Arduino.
+  </p>
+</div>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="contenido">
 
-    <h1>🔧 Construcción del RoboBus Nano</h1>
-    <p class="descripcion">
-      En esta sección se presentan los materiales utilizados y los pasos seguidos
-      para la construcción del RoboBus Nano con Arduino.
-    </p>
+  <!-- GRID DE CARDS ARDUINO -->
+  <div class="arduino-grid">
 
-    <!-- MATERIALES -->
-    <section class="tarjeta">
-      <h2>📦 Materiales Utilizados</h2>
-      <ul>
+    <!-- CARD 1: Materiales -->
+    <div class="arduino-card full-width">
+      <h3>馃摝 Materiales utilizados</h3>
+      <ul class="lista-materiales">
         <li>Arduino Nano</li>
-        <li>Shield de expansion arduino nano</li>
-        <li>Sensor ultrasónico HC-SR04</li>
+        <li>Shield de expansi贸n para Arduino Nano</li>
+        <li>Sensor ultras贸nico HC-SR04</li>
         <li>Driver de motores L298N</li>
-        <li>Placa de Bluetooth</li>
-        <li>Pantalla LCD 1602 </li>
-        <li>2 Motores DC</li>
-        <li>Ruedas</li>
-        <li>Soporte de batería</li>
-        <li>Pilas recargables</li>
-        <li>Cables Dupont Hembra - Macho</li>
-        <li>Cable UTP</li>
-        <li>Chasis del bus</li>
-        <li>Tornillos y soportes</li>
+        <li>M贸dulo Bluetooth HC-05</li>
+        <li>Pantalla LCD 1602</li>
+        <li>2 Motores DC con ruedas</li>
+        <li>Soporte de bater铆a y pilas recargables</li>
+        <li>Cables Dupont y UTP</li>
+        <li>Chasis del bus (impreso o reciclado)</li>
+        <li>Tornillos, soportes y cinta aislante</li>
       </ul>
-    </section>
+    </div>
 
-    <!-- PASOS -->
-    <section class="tarjeta">
-               
-      <h2>🛠️ Pasos de Construcción</h2>
-       <img src="image/diagrama.jpg" 
-                     alt="Diagrama" 
-                     class="animated-image" 
-                     id="mainImage">
-      
-      <ol>
-        <li>Diseño del bus y planificación de los componentes.</li>
-        <li>Armado del chasis del RoboBus.</li>
-        <li>Instalación de los motores DC.</li>
-        <li>Montaje del Arduino Nano.</li>
-        <li>Conexión del driver de motores.</li>
-        <li>Realización del cableado.</li>
-        <li>Pruebas y revisión final.</li>
-      </ol>
-    </section>
+    <!-- CARD 2: Paso 1 -->
+    <div class="arduino-card full-width">
+      <h3>Procedimientos</h3>
+      <p>OJOOOOO.</p>
+    </div>
 
-  </main>
+    
 
-  <!-- FOOTER -->
+       <!-- CARD 6: Video Explicativo -->
+    <div class="arduino-card full-width">
+      <h3>馃帴 Video Explicativo</h3>
+      <p>Mira el siguiente video donde mostramos paso a paso el montaje del RoboBus Nano.</p>
+      <div class="video-wrapper">
+        <iframe 
+          src="https://www.youtube.com/embed/watch?v=IoZOdomZynk" 
+          title="Video explicativo RoboBus Nano" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <!-- CARD 7: Diagrama de montaje -->
+    <div class="arduino-card full-width">
+      <h3>馃摳 Diagrama de montaje</h3>
+      <img src="image/diagrama.jpeg" alt="Diagrama de construcci贸n" class="arduino-img">
+    </div>
+
+  </div>
+</main>
+
   <footer>
-    <p>© 2025 RoboBus Nano</p>
+    <p>&copy; 2025 RoboBus Nano</p>
   </footer>
-
 </body>
 </html>
