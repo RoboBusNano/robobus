@@ -624,5 +624,58 @@ footer {
 .leer-mas-btn:hover {
   background: #005f99;
 }
+/* Contenedor principal para centrar todo el contenido del manual */
+.manual-container {
+  max-width: 900px; /* Evita que las tarjetas sean muy anchas */
+  margin: 0 auto 3rem auto; /* Centra horizontalmente */
+  padding: 0 1rem;
+}
 
+/* Grid para las dos tarjetas de abajo */
+.download-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 1.8rem;
+  margin-top: 1.8rem;
+}
 
+/* Ajustes de las listas para que se vean ordenadas */
+.lista-manual-check {
+  list-style: none;
+  margin-top: 1rem;
+  padding-left: 0;
+}
+
+.lista-manual-check li {
+  margin-bottom: 0.8rem;
+}
+
+.pasos-lista {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Botón de Google Play centrado */
+.google-play {
+  background: #008151 !important;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Estética para que las tarjetas de descarga tengan la misma altura */
+.download-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer {
+  flex-grow: 1; /* Empuja el botón hacia abajo si hay poco texto */
+}
+
+/* Responsive: Una columna en celulares */
+@media (max-width: 768px) {
+  .download-grid {
+    grid-template-columns: 1fr;
+  }
+}
