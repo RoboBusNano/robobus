@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  <!-- HEADER -->
   <header class="header">
     <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
     <nav class="nav-center">
@@ -17,30 +16,34 @@
       <a href="nosotros.html">Equipo</a>
       <a href="construccion.html">Construcción</a>
       <a href="programacion.html">Programación</a>
-      <a href="manual.html">Manual</a> 
       <a href="contacto.html">Contacto</a>
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
- 
-<main class="contenido">
+  <main class="contenido">
 
-  <div class="arduino-hero-center">
-  <h1>💻 Programación y Funcionamiento</h1>
-  <p class="descripcion">
-    Aquí te explicamos cómo programamos el RoboBus Nano y cómo funciona paso a paso.
-  </p>
-  </div>
+    <div class="arduino-hero-center">
+      <h1>💻 Programación y Funcionamiento</h1>
+      <p class="descripcion">
+        Aquí te explicamos cómo programamos el RoboBus Nano y cómo funciona paso a paso.
+      </p>
+    </div>
 
-  <!-- GRID DE CARDS ARDUINO -->
-  <div class="arduino-card full-width">
-    <!-- CARD 1: Código -->
-    <div class="arduino-card">
-      <h3>Código ejemplo</h3>
-      <p>Control de motores y sensor de distancia con Arduino Nano.</p>
-      <pre class="code-block">
-// Este robot fue pensado para que niñas y niños aprendan:
+    <div class="arduino-grid">
+      
+      <div class="arduino-card full-width">
+        <h3>Código fuente del Proyecto</h3>
+        <p>Explora la lógica principal cargada en el Arduino Nano.</p>
+        
+        <div class="code-container" style="margin-top: 1rem;">
+          <pre class="code-block collapsed" id="mainCode">
+/*
+ ============================================================
+
+   ROBOT EDUCATIVO "ROBOBUS NAN
+
+ ============================================================
+*/
 
 #include <SoftwareSerial.h>
 #include <Wire.h>
@@ -492,10 +495,16 @@ void melodiaInicio() {
     delay(duracion[i]+50);
   }
 }
+ </pre>
+
+  <button class="leer-mas-btn" onclick="toggleCodigo(this)">
+    Leer más
+  </button>
+</div>
+
       </pre>
     </div>
 
-    <!-- CARD 2: Paso 3 -->
     <div class="arduino-card full-width">
       <h3>Control por Bluetooth</h3>
       <p>Recibe comandos desde el celular y ejecuta acciones.</p>
@@ -513,8 +522,8 @@ void melodiaInicio() {
       </ul>
     </div>
 
-    <!-- CARD 3: Descarga -->
-    <div class="arduino-card full-width">
+    <!-- Descarga -->
+    <div class="arduino-card download-card">
       <h3>📥 Descarga</h3>
       <p>Obtén el archivo .ino completo.</p>
       <a href="archivos/codificacion-robobusnano.ino" download class="download-btn-arduino">
@@ -530,5 +539,22 @@ void melodiaInicio() {
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script>
+  function toggleCodigo(btn) {
+  const code = btn.previousElementSibling;
+
+  code.classList.toggle("collapsed");
+
+  btn.textContent = code.classList.contains("collapsed")
+    ? "Leer más"
+    : "Leer menos";
+  }
+  </script>
+          </pre>
+          <button class="download-btn-arduino" style="margin-top: 10px; cursor: pointer;" onclick="toggleCodigo(this)">
+            <ion-icon name="eye-outline"></ion-icon> <span>Leer más</span>
+          </button>
+        </div>
+      </div>
 </body>
 </html>
