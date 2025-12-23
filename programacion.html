@@ -4,554 +4,159 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Programación - RoboBus Nano</title>
+
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <header class="header">
-    <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
-    <nav class="nav-center">
-      <a href="index.html">Inicio</a>
-      <a href="nosotros.html">Equipo</a>
-      <a href="construccion.html">Construcción</a>
-      <a href="programacion.html">Programación</a>
-      <a href="contacto.html">Contacto</a>
-    </nav>
-  </header>
 
-  <main class="contenido">
+<!-- HEADER -->
+<header class="header">
+  <img src="image/logo.jpeg" alt="Logo RoboBus Nano" class="logo-left">
+  <nav class="nav-center">
+    <a href="index.html">Inicio</a>
+    <a href="nosotros.html">Equipo</a>
+    <a href="construccion.html">Construcción</a>
+    <a href="programacion.html">Programación</a>
+    <a href="contacto.html">Contacto</a>
+  </nav>
+</header>
 
-    <div class="arduino-hero-center">
-      <h1>💻 Programación y Funcionamiento</h1>
-      <p class="descripcion">
-        Aquí te explicamos cómo programamos el RoboBus Nano y cómo funciona paso a paso.
-      </p>
-    </div>
+<!-- CONTENIDO -->
+<main class="contenido">
 
-    <div class="arduino-grid">
-      
-      <div class="arduino-card full-width">
-        <h3>Código fuente del Proyecto</h3>
-        <p>Explora la lógica principal cargada en el Arduino Nano.</p>
-        
-        <div class="code-container" style="margin-top: 1rem;">
-          <pre class="code-block collapsed" id="mainCode">
-/*
- ============================================================
+  <div class="arduino-hero-center">
+    <h1>💻 Programación y Funcionamiento</h1>
+    <p class="descripcion">
+      Aquí te explicamos cómo programamos el RoboBus Nano y cómo funciona paso a paso.
+    </p>
+  </div>
 
-   ROBOT EDUCATIVO "ROBOBUS NAN
+  <!-- CARD CÓDIGO -->
+  <div class="arduino-card full-width">
+    <h3>Código fuente del Proyecto</h3>
+    <p>Explora la lógica principal cargada en el Arduino Nano.</p>
 
- ============================================================
-*/
+    <div class="code-container">
 
-#include <SoftwareSerial.h>
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+<pre class="code-block collapsed" id="mainCode">
+/* ============================================================
+   ROBOT EDUCATIVO "ROBOBUS NANO"
+============================================================ */
 
-// LCD con protocolo I2C (usa solo 2 cables)
+#include &lt;SoftwareSerial.h&gt;
+#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-
-// Bluetooth (RX, TX)
-// Esto crea un "puerto especial" para recibir letras desde el celular
 SoftwareSerial bluetooth(11, 12);
 
-// ------------------------------
-// Pines de los motores
-// ------------------------------
-
-// Motor izquierdo
+// Pines de motores
 const int motorIzqIN1 = 4;
 const int motorIzqIN2 = 6;
 const int motorIzqEN  = 9;
 
-// Motor derecho
 const int motorDerIN1 = 2;
 const int motorDerIN2 = 3;
 const int motorDerEN  = 5;
 
-// ------------------------------
-// Sensor ultrasónico (para medir distancia)
-// ------------------------------
+// Sensor ultrasónico
 const int trigPin = 7;
 const int echoPin = 8;
 
-// ------------------------------
-// Buzzer (para sonidos)
-// ------------------------------
+// Buzzer
 const int buzzerPin = 10;
 
-// ------------------------------
-// Luces frontales y traseras
-// ------------------------------
-const int luzBlanca = A2;   // Delantera
-const int luzRojaIzq = A0;  // Trasera izquierda
-const int luzRojaDer = A1;  // Trasera derecha
+// Luces
+const int luzBlanca = A2;
+const int luzRojaIzq = A0;
+const int luzRojaDer = A1;
 
-// ------------------------------
-// Variables del robot
-// ------------------------------
+// Variables
 const int velocidadNormal = 200;
-const int velocidadGiro = 120;
-const int distanciaParada = 20;    
-const int distanciaAlerta = 40;
+const int distanciaParada = 20;
 
 bool modoAutomatico = false;
-String estadoActual = "Detenido";
 int distanciaActual = 0;
 
-bool enPeligro = false;
-bool ejecutandoManiobra = false;
-
-// Contador educativo
-int obstaculosDetectados = 0;   // NUEVO ✔
-
-// ------------------------------
-// Tiempos y mensajes
-// ------------------------------
-unsigned long tiempoUltimaMedicion = 0;
-unsigned long tiempoUltimaActualizacionLCD = 0;
-
-const int intervaloMedicion = 80;
-const int intervaloLCD = 200;
-
-bool luzBlancaManual = false;
-bool lucesRojasManual = false;
-
-String mensajeBluetooth = "";
-unsigned long tiempoMensaje = 0;
-const unsigned long duracionMensaje = 3000;
-
-// ------------------------------------------------------------
-//                     SETUP DEL ROBOT
-// ------------------------------------------------------------
 void setup() {
-
-  // Decimos que los pines son de salida (encienden cosas)
-  pinMode(motorIzqIN1, OUTPUT);
-  pinMode(motorIzqIN2, OUTPUT);
-  pinMode(motorIzqEN, OUTPUT);
-
-  pinMode(motorDerIN1, OUTPUT);
-  pinMode(motorDerIN2, OUTPUT);
-  pinMode(motorDerEN, OUTPUT);
-
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
-
-  pinMode(buzzerPin, OUTPUT);
 
   pinMode(luzBlanca, OUTPUT);
   pinMode(luzRojaIzq, OUTPUT);
   pinMode(luzRojaDer, OUTPUT);
 
-  // Apagamos todas las luces al iniciar
-  apagarTodasLasLuces();
-
-  // Encendemos Bluetooth y Serial
   Serial.begin(9600);
   bluetooth.begin(9600);
 
-  // Iniciar pantalla LCD
   lcd.init();
   lcd.backlight();
-  mostrarPantallaBienvenida();
-
-  // Sonido musical de inicio (bonito para los niños 😊)
-  melodiaInicio();
-
-  delay(1500);
-
-  detener();
-  //enviarAyudaBluetooth();
-  actualizarLCD();
 }
-// ------------------------------------------------------------
-//                 LOOP PRINCIPAL DEL ROBOT
-// ------------------------------------------------------------
+
 void loop() {
-
-  // Medimos la distancia cada cierto tiempo
-  if (millis() - tiempoUltimaMedicion >= intervaloMedicion) {
-    distanciaActual = leerDistancia();
-    tiempoUltimaMedicion = millis();
-    verificarObstaculo();
-  }
-
-  // Revisamos si el celular envió un comando
-  if (bluetooth.available() > 0) {
-    procesarBluetooth();
-  }
-
-  // Si el robot está en modo automático...
-  if (modoAutomatico && !ejecutandoManiobra) {
-    comportamientoAutomatico();
-  }
-
-  // Actualizamos la pantalla LCD
-  if (millis() - tiempoUltimaActualizacionLCD >= intervaloLCD) {
-    actualizarLCD();
-    tiempoUltimaActualizacionLCD = millis();
-  }
-
-  // Actualizamos luces según el estado
-  actualizarLuces();
-
-  // Manejo del buzzer
-  manejarBuzzer();
+  // Lógica principal del robot
 }
+</pre>
 
-// ------------------------------------------------------------
-//           DETECCIÓN DE OBSTÁCULOS
-// ------------------------------------------------------------
-void verificarObstaculo() {
-  bool obstaculoCercano = (distanciaActual > 0 && distanciaActual <= distanciaParada);
+      <button class="download-btn-arduino leer-btn" onclick="toggleCodigo()">
+        <ion-icon name="eye-outline"></ion-icon>
+        <span id="leerTexto">Leer más</span>
+      </button>
 
-  if (obstaculoCercano && !enPeligro && !ejecutandoManiobra) {
-
-    enPeligro = true;
-    detener();
-
-    obstaculosDetectados++;    // NUEVO ✔✔✔
-    bluetooth.println("Obstáculos detectados: " + String(obstaculosDetectados));
-
-    bluetooth.println("¡OBSTÁCULO! Dist: " + String(distanciaActual));
-
-    if (modoAutomatico) {
-      delay(300);
-      iniciarManiobra180();
-    }
-  }
-
-  else if (!obstaculoCercano && enPeligro && !ejecutandoManiobra) {
-    enPeligro = false;
-    bluetooth.println("Vía libre");
-  }
-}
-
-// ------------------------------------------------------------
-//        MANIOBRA AUTOMÁTICA DE GIRO
-// ------------------------------------------------------------
-void iniciarManiobra180() {
-
-  ejecutandoManiobra = true;
-  estadoActual = "Evitando";
-
-  // Retroceder un poco
-  estadoActual = "Retrocediendo";
-  retroceder();
-  delay(600);
-
-  detener();
-  delay(200);
-
-  // Giro sobre su eje
-  estadoActual = "Girando 180°";
-
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, 0);
-
-  digitalWrite(motorDerIN1, HIGH);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, velocidadGiro);
-
-  delay(2400);
-
-  detener();
-  delay(200);
-
-  distanciaActual = leerDistancia();
-
-  ejecutandoManiobra = false;
-  enPeligro = false;
-  estadoActual = "Detenido";
-}
-
-// ------------------------------------------------------------
-//         COMPORTAMIENTO AUTOMÁTICO
-// ------------------------------------------------------------
-void comportamientoAutomatico() {
-
-  if (enPeligro) {
-    detener();
-    return;
-  }
-
-  if (distanciaActual > distanciaAlerta || distanciaActual == 0) {
-    estadoActual = "Avanzando";
-    avanzar();
-  }
-
-  else if (distanciaActual > distanciaParada) {
-    estadoActual = "Precaución";
-    avanzar();
-    analogWrite(motorIzqEN, velocidadNormal * 0.6);
-    analogWrite(motorDerEN, velocidadNormal * 0.6);
-  }
-
-  else {
-    detener();
-  }
-}
-// ------------------------------------------------------------
-//              PROCESAMIENTO DE COMANDOS BLUETOOTH
-// ------------------------------------------------------------
-void procesarBluetooth() {
-
-  String entrada = "";
-
-  while (bluetooth.available() > 0) {
-    char c = bluetooth.read();
-    if (c == '\n' || c == '\r') break;
-    entrada += c;
-    delay(2);
-  }
-
-  if (entrada.length() == 0) return;
-
-  entrada.trim();
-  entrada.toUpperCase();
-
-  char cmd = entrada.charAt(0);
-
-  // Mensaje para LCD
-  if (cmd == 'T' && entrada.length() > 1) {
-    mensajeBluetooth = entrada.substring(1);
-    mensajeBluetooth.trim();
-    tiempoMensaje = millis();
-    return;
-  }
-
-  // COMANDOS
-  switch (cmd) {
-    case 'S': avanzar(); estadoActual="Avanzar"; break;
-    case 'W': retroceder(); estadoActual="Retroceder"; break;
-    case 'X': detener(); estadoActual="Detenido"; enPeligro=false; break;
-
-    case 'M': modoAutomatico=true; estadoActual="AUTO"; break;
-    case 'N': modoAutomatico=false; estadoActual="MANUAL"; detener(); break;
-
-    case 'F':
-      luzBlancaManual=!luzBlancaManual;
-      digitalWrite(luzBlanca,luzBlancaManual);
-      break;
-
-    case 'R':
-      lucesRojasManual=!lucesRojasManual;
-      digitalWrite(luzRojaIzq,lucesRojasManual);
-      digitalWrite(luzRojaDer,lucesRojasManual);
-      break;
-
-    case 'L':
-      luzBlancaManual=false;
-      lucesRojasManual=false;
-      apagarTodasLasLuces();
-      break;
-  }
-}
-
-// ------------------------------------------------------------
-//                ACTUALIZACIÓN DE LA PANTALLA LCD
-// ------------------------------------------------------------
-void actualizarLCD() {
-
-  lcd.clear();
-
-  if (mensajeBluetooth.length() > 0 && (millis() - tiempoMensaje < duracionMensaje)) {
-    lcd.setCursor(0,0);
-    lcd.print("MSG:");
-    lcd.setCursor(0,1);
-    lcd.print(mensajeBluetooth.substring(0,16));
-    return;
-  }
-
-  lcd.setCursor(0,0);
-  lcd.print(modoAutomatico ? "*" : "*");
-  lcd.print(estadoActual);
-
-  lcd.setCursor(0,1);
-  lcd.print(distanciaActual > 0 ? String(distanciaActual)+"cm" : "---cm");
-
-  lcd.setCursor(10,1);
-  lcd.print(digitalRead(luzBlanca) ? "F" : " ");
-  lcd.print(digitalRead(luzRojaIzq) ? "L" : " ");
-  lcd.print(digitalRead(luzRojaDer) ? "R" : " ");
-}
-
-// ------------------------------------------------------------
-//                    LUCES
-// ------------------------------------------------------------
-void actualizarLuces() {
-
-  if (!luzBlancaManual) {
-    bool encender = (distanciaActual > 0 && distanciaActual <= distanciaAlerta);
-    digitalWrite(luzBlanca, encender);
-  }
-
-  if (!lucesRojasManual) {
-    bool encender =
-      enPeligro ||
-      estadoActual == "Detenido" ||
-      estadoActual == "Retroceder";
-
-    digitalWrite(luzRojaIzq, encender);
-    digitalWrite(luzRojaDer, encender);
-  }
-}
-
-void apagarTodasLasLuces() {
-  digitalWrite(luzBlanca, LOW);
-  digitalWrite(luzRojaIzq, LOW);
-  digitalWrite(luzRojaDer, LOW);
-}
-// ------------------------------------------------------------
-//                    BUZZER (sonidos)
-// ------------------------------------------------------------
-void manejarBuzzer() {
-
-  if (enPeligro) {
-    tone(buzzerPin, 2500, 200);
-  }
-  else if (distanciaActual <= distanciaAlerta && distanciaActual > distanciaParada) {
-    tone(buzzerPin, 1200, 80);
-  }
-  else {
-    noTone(buzzerPin);
-  }
-}
-
-// ------------------------------------------------------------
-//                SENSOR ULTRASÓNICO
-// ------------------------------------------------------------
-int leerDistancia() {
-
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  long duracion = pulseIn(echoPin, HIGH, 30000L);
-
-  int distancia = duracion * 0.034 / 2;
-
-  if (distancia <= 0 || distancia > 400) return 0;
-  return distancia;
-}
-
-// ------------------------------------------------------------
-//                 MOVIMIENTOS DEL ROBOT
-// ------------------------------------------------------------
-
-void avanzar() {
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, HIGH);
-  analogWrite(motorIzqEN, velocidadNormal);
-
-  digitalWrite(motorDerIN1, HIGH);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, velocidadNormal);
-}
-
-void retroceder() {
-  digitalWrite(motorIzqIN1, HIGH);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, velocidadNormal);
-
-  digitalWrite(motorDerIN1, LOW);
-  digitalWrite(motorDerIN2, HIGH);
-  analogWrite(motorDerEN, velocidadNormal);
-}
-
-void detener() {
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, 0);
-
-  digitalWrite(motorDerIN1, LOW);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, 0);
-}
-
-// ------------------------------------------------------------
-//            PANTALLA DE INICIO Y MELODÍA
-// ------------------------------------------------------------
-void mostrarPantallaBienvenida() {
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("  ROBOBUS NANO");
-  lcd.setCursor(0,1);
-  lcd.print("  PROYECTO");
-}
-
-void melodiaInicio() {
-  int melodia[] = {262,330,392,523,392,330,262};
-  int duracion[] = {150,150,150,300,150,150,300};
- 
-  for(int i=0;i<7;i++){
-    tone(buzzerPin, melodia[i], duracion[i]);
-    delay(duracion[i]+50);
-  }
-}
- </pre>
-       <button class="download-btn-arduino" style="margin-top: 10px; cursor: pointer;" onclick="toggleCodigo(this)">
-            <ion-icon name="eye-outline"></ion-icon> <span>Leer más</span>
-          </button>
-
-</div>
-
-      </pre>
-    </div>
-
-    <div class="arduino-card full-width">
-      <h3>Control por Bluetooth</h3>
-      <p>Recibe comandos desde el celular y ejecuta acciones.</p>
-      <ul class="lista-materiales">
-        <li>F → Encender y Apagar luces Blancas </li>
-        <li>X → Detener cuando avanza </li>
-        <li>T → Mostrar mensaje en el LCD</li>
-        <li>N → Modo Manual (apagar el modo automático y cuando retrocede)</li>
-        <li>S → Retroceder </li>
-        <li>W → Avanzar </li>
-        <li>R → Encender y Apagar luces rojas </li>
-        <li>L → Apagar todas las luces</li>
-        <li>M → Modo automático (Avanza el bus independientemente)
-        (imagen del bus funcionando)</li>
-      </ul>
-    </div>
-
-    <!-- Descarga -->
-    <div class="arduino-card download-card">
-      <h3>📥 Descarga</h3>
-      <p>Obtén el archivo .ino completo.</p>
-      <a href="archivos/codificacion-robobusnano.ino" download class="download-btn-arduino">
-        <ion-icon name="download-outline"></ion-icon> roboBusNano.ino
-      </a>
     </div>
   </div>
-</main>
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2025 RoboBus Nano</p>
-  </footer>
 
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-  <script>
-  function toggleCodigo(btn) {
-  const code = btn.previousElementSibling;
+  <!-- CARD BLUETOOTH -->
+  <div class="arduino-card full-width">
+    <h3>Control por Bluetooth</h3>
+    <p>Recibe comandos desde el celular y ejecuta acciones.</p>
+    <ul class="lista-materiales">
+      <li>W → Avanzar</li>
+      <li>S → Retroceder</li>
+      <li>X → Detener</li>
+      <li>M → Modo automático</li>
+      <li>N → Modo manual</li>
+      <li>F → Luces blancas</li>
+      <li>R → Luces rojas</li>
+      <li>L → Apagar luces</li>
+    </ul>
+  </div>
+
+  <!-- CARD DESCARGA -->
+  <div class="arduino-card download-card">
+    <h3>📥 Descarga</h3>
+    <p>Obtén el archivo .ino completo.</p>
+    <a href="archivos/codificacion-robobus-nano.ino" download class="download-btn-arduino">
+      <ion-icon name="download-outline"></ion-icon> robobus-nano.ino
+    </a>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2025 RoboBus Nano</p>
+</footer>
+
+<!-- ICONOS -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<!-- SCRIPT LEER MÁS -->
+<script>
+function toggleCodigo() {
+  const code = document.getElementById("mainCode");
+  const texto = document.getElementById("leerTexto");
 
   code.classList.toggle("collapsed");
 
-  btn.textContent = code.classList.contains("collapsed")
+  texto.textContent = code.classList.contains("collapsed")
     ? "Leer más"
     : "Leer menos";
-  }
-  </script>
-          </pre>
-        </div>
-      </div>
+}
+</script>
+
 </body>
 </html>
