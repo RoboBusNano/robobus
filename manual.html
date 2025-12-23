@@ -4,8 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manual de Usuario - RoboBus Nano</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="estilos.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Ajustes específicos para alinear tarjetas y botones */
+    .manual-container {
+      max-width: 950px;
+      margin: 0 auto 40px auto;
+      padding: 0 20px;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+      align-items: stretch; /* Estira las tarjetas para que midan lo mismo */
+    }
+
+    .arduino-card-flex {
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Ocupa todo el alto disponible */
+    }
+
+    .card-content {
+      flex-grow: 1; /* Empuja el botón hacia abajo de forma equilibrada */
+    }
+
+    .google-play-btn {
+      background-color: #008151 !important;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .download-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
@@ -16,61 +54,62 @@
       <a href="nosotros.html">Equipo</a>
       <a href="construccion.html">Construcción</a>
       <a href="programacion.html">Programación</a>
-      <a href="manual.html">Manual</a> 
+      <a href="manual.html">Manual</a>
       <a href="contacto.html">Contacto</a>
     </nav>
   </header>
 
   <main class="contenido">
-
     <div class="arduino-hero-center">
       <h1>📚 Manual de Usuario</h1>
-      <p class="descripcion">
-        Consulta la guía completa para el configuración y uso del RoboBus Nano.
-      </p>
+      <p class="descripcion">Consulta la guía completa para la configuración y uso del RoboBus Nano.</p>
     </div>
 
-    <div class="arduino-grid">
+    <div class="manual-container">
       
       <div class="arduino-card full-width">
         <h3>¿Qué encontrarás en este manual?</h3>
-        <p>El documento incluye instrucciones detalladas sobre:</p>
-        <ul class="lista-materiales" style="margin-top: 1rem;">
-          <li>Instalación y configuración de software(Serial Bluetooth Terminal)</li>
-          <p>
-            Para controlar el RoboBus Nano desde el celular, es necesario instalar la aplicación
-            <strong>Serial Bluetooth Terminal</strong>.
-          </p>
-
-        <h4>Pasos de instalación:</h4>
-        <ol class="lista-materiales">
-            <li>Abre la tienda <strong>Google Play</strong> en tu dispositivo Android.</li>
-            <li>Busca <strong>Serial Bluetooth Terminal</strong>.</li>
-            <li>Selecciona la aplicación desarrollada por <strong>Kai Morich</strong>.</li>
-            <li>Presiona <strong>Instalar</strong> y espera a que finalice la descarga.</li>
-            <li>Activa el Bluetooth del dispositivo.</li>
-        </ol>
-
-        <a
-            href="https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal"
-            target="_blank"
-            class="download-btn-arduino"
-            style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 8px;"
-        >
-            <ion-icon name="logo-android"></ion-icon>
-            Descargar desde Google Play
-        </a>
-          <li>Procedimiento de encendido del hardware</li>
-          <li>Interfaz de control por comandos</li>
+        <p>Este documento incluye instrucciones detalladas sobre:</p>
+        <ul style="list-style: none; padding: 0; margin-top: 15px;">
+          <li>✅ Instalación y configuración de software (Serial Bluetooth Terminal)</li>
+          <li>✅ Procedimiento de encendido del hardware</li>
+          <li>✅ Interfaz de control por comandos</li>
         </ul>
       </div>
 
-      <div class="arduino-card download-card">
-        <h3>📥 Descargar Manual</h3>
-        <p>Obtén el manual oficial en formato PDF para que tengas una guía adecuada para utilizar nuestro RoboBus Nano.</p>
-        <a href="archivos/manual-usuario.pdf" download class="download-btn-arduino">
-          <ion-icon name="document-text-outline"></ion-icon> Descargar Manual (.pdf)
-        </a>
+      <div class="download-grid">
+        
+        <div class="arduino-card arduino-card-flex">
+          <div class="card-content">
+            <h3>📱 Pasos de instalación</h3>
+            <p>Prepara tu control remoto:</p>
+            <ol style="padding-left: 20px; margin: 15px 0; font-size: 0.9rem; color: #444;">
+              <li>Abre <b>Google Play</b> en tu Android.</li>
+              <li>Busca <b>Serial Bluetooth Terminal</b>.</li>
+              <li>Instala la aplicación de <b>Kai Morich</b>.</li>
+              <li>Activa el <b>Bluetooth</b> de tu dispositivo.</li>
+            </ol>
+          </div>
+          <a href="https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal" 
+             target="_blank" 
+             class="download-btn-arduino google-play-btn" 
+             style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px;">
+            <ion-icon name="logo-google-playstore"></ion-icon> Google Play
+          </a>
+        </div>
+
+        <div class="arduino-card arduino-card-flex">
+          <div class="card-content">
+            <h3>📥 Descargar Manual</h3>
+            <p>Obtén el manual oficial en PDF para utilizar el RoboBus Nano correctamente de manera rápida y sencilla.</p>
+          </div>
+          <a href="archivos/manual-usuario.pdf" download 
+             class="download-btn-arduino" 
+             style="width: 100%; justify-content: center; display: flex; align-items: center; gap: 8px;">
+            <ion-icon name="document-text-outline"></ion-icon> Descargar (.pdf)
+          </a>
+        </div>
+
       </div>
     </div>
   </main>
