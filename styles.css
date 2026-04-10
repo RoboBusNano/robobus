@@ -634,7 +634,7 @@ footer {
 /* Grid para las dos tarjetas de abajo */
 .download-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  grid-template-columns: 1fr 1fr 1fr; /* Dos columnas iguales */
   gap: 1.8rem;
   margin-top: 1.8rem;
 }
