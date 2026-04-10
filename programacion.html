@@ -38,461 +38,231 @@
         
         <div class="code-container" style="margin-top: 1rem;">
           <pre class="code-block collapsed" id="mainCode">
-/*
- ============================================================
-   ROBOT EDUCATIVO "ROBOBUS NANO
- ============================================================
-*/
-            
 #include <SoftwareSerial.h>
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
 
-// LCD con protocolo I2C (usa solo 2 cables)
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+SoftwareSerial BT(2, 3);
 
-// Bluetooth (RX, TX)
-// Esto crea un "puerto especial" para recibir letras desde el celular
-SoftwareSerial bluetooth(11, 12);
+// --- Pines motores ---
+const int enA = 10; const int in1 = 7; const int in2 = 8;
+const int enB = 11; const int in3 = 12; const int in4 = 13;
 
-// ------------------------------
-// Pines de los motores
-// ------------------------------
+// --- LEDs ---
+const int led1 = 5; const int led2 = 6;
 
-// Motor izquierdo
-const int motorIzqIN1 = 4;
-const int motorIzqIN2 = 6;
-const int motorIzqEN  = 9;
+// --- Ultrasonico FRONTAL ---
+const int trigFront = A0;
+const int echoFront = A1;
 
-// Motor derecho
-const int motorDerIN1 = 2;
-const int motorDerIN2 = 3;
-const int motorDerEN  = 5;
+// --- Ultrasonico TRASERO ---
+const int trigBack = A2;
+const int echoBack = A3;
 
-// ------------------------------
-// Sensor ultrasónico (para medir distancia)
-// ------------------------------
-const int trigPin = 7;
-const int echoPin = 8;
+// --- Buzzer activo ---
+const int buzzer = A4;
 
-// ------------------------------
-// Buzzer (para sonidos)
-// ------------------------------
-const int buzzerPin = 10;
+// --- Estados de maniobra ---
+#define EST_AVANZAR  0
+#define EST_PITAR    1
+#define EST_RETRO    2
+#define EST_GIRAR    3
 
-// ------------------------------
-// Luces frontales y traseras
-// ------------------------------
-const int luzBlanca = A2;   // Delantera
-const int luzRojaIzq = A0;  // Trasera izquierda
-const int luzRojaDer = A1;  // Trasera derecha
+// --- Variables ---
+bool modoAutonomo = false;
+int distFront, distBack;
+unsigned long ultimaMedicion = 0;
+unsigned long tiempoEstado = 0;
+int estadoManiobra = EST_AVANZAR;
+int contPitido = 0;
+bool obstaculoFrontal = false;
 
-// ------------------------------
-// Variables del robot
-// ------------------------------
-const int velocidadNormal = 200;
-const int velocidadGiro = 120;
-const int distanciaParada = 20;    
-const int distanciaAlerta = 40;
-
-bool modoAutomatico = false;
-String estadoActual = "Detenido";
-int distanciaActual = 0;
-
-bool enPeligro = false;
-bool ejecutandoManiobra = false;
-
-// Contador educativo
-int obstaculosDetectados = 0;   // NUEVO ✔
-
-// ------------------------------
-// Tiempos y mensajes
-// ------------------------------
-unsigned long tiempoUltimaMedicion = 0;
-unsigned long tiempoUltimaActualizacionLCD = 0;
-
-const int intervaloMedicion = 80;
-const int intervaloLCD = 200;
-
-bool luzBlancaManual = false;
-bool lucesRojasManual = false;
-
-String mensajeBluetooth = "";
-unsigned long tiempoMensaje = 0;
-const unsigned long duracionMensaje = 3000;
-
-// ------------------------------------------------------------
-//                     SETUP DEL ROBOT
-// ------------------------------------------------------------
 void setup() {
+  pinMode(enA, OUTPUT); pinMode(enB, OUTPUT);
+  pinMode(in1, OUTPUT); pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT); pinMode(in4, OUTPUT);
+  pinMode(led1, OUTPUT); pinMode(led2, OUTPUT);
 
-  // Decimos que los pines son de salida (encienden cosas)
-  pinMode(motorIzqIN1, OUTPUT);
-  pinMode(motorIzqIN2, OUTPUT);
-  pinMode(motorIzqEN, OUTPUT);
+  pinMode(trigFront, OUTPUT); pinMode(echoFront, INPUT);
+  pinMode(trigBack,  OUTPUT); pinMode(echoBack,  INPUT);
+  pinMode(buzzer, OUTPUT);
+  digitalWrite(buzzer, LOW);
 
-  pinMode(motorDerIN1, OUTPUT);
-  pinMode(motorDerIN2, OUTPUT);
-  pinMode(motorDerEN, OUTPUT);
-
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
-
-  pinMode(buzzerPin, OUTPUT);
-
-  pinMode(luzBlanca, OUTPUT);
-  pinMode(luzRojaIzq, OUTPUT);
-  pinMode(luzRojaDer, OUTPUT);
-
-  // Apagamos todas las luces al iniciar
-  apagarTodasLasLuces();
-
-  // Encendemos Bluetooth y Serial
   Serial.begin(9600);
-  bluetooth.begin(9600);
-
-  // Iniciar pantalla LCD
-  lcd.init();
-  lcd.backlight();
-  mostrarPantallaBienvenida();
-
-  // Sonido musical de inicio (bonito para los niños 😊)
-  melodiaInicio();
-
-  delay(1500);
-
-  detener();
-  //enviarAyudaBluetooth();
-  actualizarLCD();
+  BT.begin(9600);
+  BT.println("VEHICULO LISTO");
 }
-// ------------------------------------------------------------
-//                 LOOP PRINCIPAL DEL ROBOT
-// ------------------------------------------------------------
+
 void loop() {
-
-  // Medimos la distancia cada cierto tiempo
-  if (millis() - tiempoUltimaMedicion >= intervaloMedicion) {
-    distanciaActual = leerDistancia();
-    tiempoUltimaMedicion = millis();
-    verificarObstaculo();
+  // 1. Bluetooth siempre primero
+  if (BT.available()) {
+    char comando = BT.read();
+    ejecutarComando(comando);
   }
 
-  // Revisamos si el celular envió un comando
-  if (bluetooth.available() > 0) {
-    procesarBluetooth();
-  }
+  // 2. Medir sensores cada 100ms siempre
+  if (millis() - ultimaMedicion >= 100) {
+    ultimaMedicion = millis();
+    distFront = medirDistancia(trigFront, echoFront);
+    delay(5);
+    distBack = medirDistancia(trigBack, echoBack);
 
-  // Si el robot está en modo automático...
-  if (modoAutomatico && !ejecutandoManiobra) {
-    comportamientoAutomatico();
-  }
-
-  // Actualizamos la pantalla LCD
-  if (millis() - tiempoUltimaActualizacionLCD >= intervaloLCD) {
-    actualizarLCD();
-    tiempoUltimaActualizacionLCD = millis();
-  }
-
-  // Actualizamos luces según el estado
-  actualizarLuces();
-
-  // Manejo del buzzer
-  manejarBuzzer();
-}
-
-// ------------------------------------------------------------
-//           DETECCIÓN DE OBSTÁCULOS
-// ------------------------------------------------------------
-void verificarObstaculo() {
-  bool obstaculoCercano = (distanciaActual > 0 && distanciaActual <= distanciaParada);
-
-  if (obstaculoCercano && !enPeligro && !ejecutandoManiobra) {
-
-    enPeligro = true;
-    detener();
-
-    obstaculosDetectados++;    // NUEVO ✔✔✔
-    bluetooth.println("Obstáculos detectados: " + String(obstaculosDetectados));
-
-    bluetooth.println("¡OBSTÁCULO! Dist: " + String(distanciaActual));
-
-    if (modoAutomatico) {
-      delay(300);
-      iniciarManiobra180();
+    // Seguridad en modo manual
+    if (!modoAutonomo) {
+      if (distFront > 0 && distFront < 15) {
+        parar();
+        digitalWrite(buzzer, HIGH);
+        digitalWrite(led1, HIGH); digitalWrite(led2, HIGH);
+      } else if (distBack > 0 && distBack < 10) {
+        parar();
+        digitalWrite(buzzer, HIGH);
+        digitalWrite(led1, HIGH); digitalWrite(led2, HIGH);
+      } else {
+        digitalWrite(buzzer, LOW);
+        digitalWrite(led1, LOW); digitalWrite(led2, LOW);
+      }
     }
   }
 
-  else if (!obstaculoCercano && enPeligro && !ejecutandoManiobra) {
-    enPeligro = false;
-    bluetooth.println("Vía libre");
+  // 3. Logica autonoma sin delay
+  if (modoAutonomo) {
+    maquinaEstados();
   }
 }
 
-// ------------------------------------------------------------
-//        MANIOBRA AUTOMÁTICA DE GIRO
-// ------------------------------------------------------------
-void iniciarManiobra180() {
+void maquinaEstados() {
+  unsigned long ahora = millis();
 
-  ejecutandoManiobra = true;
-  estadoActual = "Evitando";
+  switch (estadoManiobra) {
 
-  // Retroceder un poco
-  estadoActual = "Retrocediendo";
-  retroceder();
-  delay(600);
-
-  detener();
-  delay(200);
-
-  // Giro sobre su eje
-  estadoActual = "Girando 180°";
-
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, 0);
-
-  digitalWrite(motorDerIN1, HIGH);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, velocidadGiro);
-
-  delay(2400);
-
-  detener();
-  delay(200);
-
-  distanciaActual = leerDistancia();
-
-  ejecutandoManiobra = false;
-  enPeligro = false;
-  estadoActual = "Detenido";
-}
-
-// ------------------------------------------------------------
-//         COMPORTAMIENTO AUTOMÁTICO
-// ------------------------------------------------------------
-void comportamientoAutomatico() {
-
-  if (enPeligro) {
-    detener();
-    return;
-  }
-
-  if (distanciaActual > distanciaAlerta || distanciaActual == 0) {
-    estadoActual = "Avanzando";
-    avanzar();
-  }
-
-  else if (distanciaActual > distanciaParada) {
-    estadoActual = "Precaución";
-    avanzar();
-    analogWrite(motorIzqEN, velocidadNormal * 0.6);
-    analogWrite(motorDerEN, velocidadNormal * 0.6);
-  }
-
-  else {
-    detener();
-  }
-}
-// ------------------------------------------------------------
-//              PROCESAMIENTO DE COMANDOS BLUETOOTH
-// ------------------------------------------------------------
-void procesarBluetooth() {
-
-  String entrada = "";
-
-  while (bluetooth.available() > 0) {
-    char c = bluetooth.read();
-    if (c == '\n' || c == '\r') break;
-    entrada += c;
-    delay(2);
-  }
-
-  if (entrada.length() == 0) return;
-
-  entrada.trim();
-  entrada.toUpperCase();
-
-  char cmd = entrada.charAt(0);
-
-  // Mensaje para LCD
-  if (cmd == 'T' && entrada.length() > 1) {
-    mensajeBluetooth = entrada.substring(1);
-    mensajeBluetooth.trim();
-    tiempoMensaje = millis();
-    return;
-  }
-
-  // COMANDOS
-  switch (cmd) {
-    case 'S': avanzar(); estadoActual="Avanzar"; break;
-    case 'W': retroceder(); estadoActual="Retroceder"; break;
-    case 'X': detener(); estadoActual="Detenido"; enPeligro=false; break;
-
-    case 'M': modoAutomatico=true; estadoActual="AUTO"; break;
-    case 'N': modoAutomatico=false; estadoActual="MANUAL"; detener(); break;
-
-    case 'F':
-      luzBlancaManual=!luzBlancaManual;
-      digitalWrite(luzBlanca,luzBlancaManual);
+    case EST_AVANZAR:
+      if (distFront > 0 && distFront < 15) {
+        parar();
+        obstaculoFrontal = true;
+        contPitido = 0;
+        estadoManiobra = EST_PITAR;
+        tiempoEstado = ahora;
+      } else if (distBack > 0 && distBack < 10) {
+        parar();
+        obstaculoFrontal = false;
+        contPitido = 0;
+        estadoManiobra = EST_PITAR;
+        tiempoEstado = ahora;
+      } else {
+        adelante();
+        digitalWrite(buzzer, LOW);
+      }
       break;
 
-    case 'R':
-      lucesRojasManual=!lucesRojasManual;
-      digitalWrite(luzRojaIzq,lucesRojasManual);
-      digitalWrite(luzRojaDer,lucesRojasManual);
+    case EST_PITAR:
+      if (contPitido < 3) {
+        int ciclo = contPitido * 350;
+        int t = (ahora - tiempoEstado) - ciclo;
+        if (t >= 0 && t < 200) {
+          digitalWrite(buzzer, HIGH);
+          digitalWrite(led1, HIGH); digitalWrite(led2, HIGH);
+        } else if (t >= 200 && t < 350) {
+          digitalWrite(buzzer, LOW);
+          digitalWrite(led1, LOW); digitalWrite(led2, LOW);
+        } else if (t >= 350) {
+          contPitido++;
+        }
+      } else {
+        digitalWrite(buzzer, LOW);
+        digitalWrite(led1, LOW); digitalWrite(led2, LOW);
+        // Frontal: retrocede — Trasero: avanza
+        if (obstaculoFrontal) {
+          atras();
+        } else {
+          adelante();
+        }
+        estadoManiobra = EST_RETRO;
+        tiempoEstado = ahora;
+      }
       break;
 
-    case 'L':
-      luzBlancaManual=false;
-      lucesRojasManual=false;
-      apagarTodasLasLuces();
+    case EST_RETRO:
+      if (ahora - tiempoEstado >= 500) {
+        parar();
+        estadoManiobra = EST_GIRAR;
+        tiempoEstado = ahora;
+      }
+      break;
+
+    case EST_GIRAR:
+      if (ahora - tiempoEstado < 100) {
+        parar();
+      } else if (ahora - tiempoEstado < 500) {
+        // Frontal gira — Trasero no gira, vuelve directo
+        if (obstaculoFrontal) {
+          derecha();
+        } else {
+          parar();
+        }
+      } else {
+        parar();
+        estadoManiobra = EST_AVANZAR;
+      }
       break;
   }
 }
 
-// ------------------------------------------------------------
-//                ACTUALIZACIÓN DE LA PANTALLA LCD
-// ------------------------------------------------------------
-void actualizarLCD() {
+void ejecutarComando(char c) {
+  if (c >= 'a' && c <= 'z') c = c - 32;
 
-  lcd.clear();
-
-  if (mensajeBluetooth.length() > 0 && (millis() - tiempoMensaje < duracionMensaje)) {
-    lcd.setCursor(0,0);
-    lcd.print("MSG:");
-    lcd.setCursor(0,1);
-    lcd.print(mensajeBluetooth.substring(0,16));
-    return;
-  }
-
-  lcd.setCursor(0,0);
-  lcd.print(modoAutomatico ? "*" : "*");
-  lcd.print(estadoActual);
-
-  lcd.setCursor(0,1);
-  lcd.print(distanciaActual > 0 ? String(distanciaActual)+"cm" : "---cm");
-
-  lcd.setCursor(10,1);
-  lcd.print(digitalRead(luzBlanca) ? "F" : " ");
-  lcd.print(digitalRead(luzRojaIzq) ? "L" : " ");
-  lcd.print(digitalRead(luzRojaDer) ? "R" : " ");
-}
-
-// ------------------------------------------------------------
-//                    LUCES
-// ------------------------------------------------------------
-void actualizarLuces() {
-
-  if (!luzBlancaManual) {
-    bool encender = (distanciaActual > 0 && distanciaActual <= distanciaAlerta);
-    digitalWrite(luzBlanca, encender);
-  }
-
-  if (!lucesRojasManual) {
-    bool encender =
-      enPeligro ||
-      estadoActual == "Detenido" ||
-      estadoActual == "Retroceder";
-
-    digitalWrite(luzRojaIzq, encender);
-    digitalWrite(luzRojaDer, encender);
+  switch (c) {
+    case 'F': modoAutonomo = false; estadoManiobra = EST_AVANZAR; adelante();  break;
+    case 'B': modoAutonomo = false; estadoManiobra = EST_AVANZAR; atras();     break;
+    case 'L': modoAutonomo = false; estadoManiobra = EST_AVANZAR; izquierda(); break;
+    case 'R': modoAutonomo = false; estadoManiobra = EST_AVANZAR; derecha();   break;
+    case 'S': modoAutonomo = false; estadoManiobra = EST_AVANZAR; parar();     break;
+    case 'A':
+      modoAutonomo = true;
+      estadoManiobra = EST_AVANZAR;
+      BT.println("MODO AUTONOMO");
+      break;
+    case '1': digitalWrite(led1, HIGH); digitalWrite(led2, HIGH); break;
+    case '0': digitalWrite(led1, LOW);  digitalWrite(led2, LOW);  break;
+    case 'H':
+      digitalWrite(buzzer, HIGH);
+      delay(300);
+      digitalWrite(buzzer, LOW);
+      break;
   }
 }
 
-void apagarTodasLasLuces() {
-  digitalWrite(luzBlanca, LOW);
-  digitalWrite(luzRojaIzq, LOW);
-  digitalWrite(luzRojaDer, LOW);
-}
-// ------------------------------------------------------------
-//                    BUZZER (sonidos)
-// ------------------------------------------------------------
-void manejarBuzzer() {
-
-  if (enPeligro) {
-    tone(buzzerPin, 2500, 200);
-  }
-  else if (distanciaActual <= distanciaAlerta && distanciaActual > distanciaParada) {
-    tone(buzzerPin, 1200, 80);
-  }
-  else {
-    noTone(buzzerPin);
-  }
-}
-
-// ------------------------------------------------------------
-//                SENSOR ULTRASÓNICO
-// ------------------------------------------------------------
-int leerDistancia() {
-
-  digitalWrite(trigPin, LOW);
+int medirDistancia(int trig, int echo) {
+  digitalWrite(trig, LOW);
   delayMicroseconds(2);
-
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(trig, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  long duracion = pulseIn(echoPin, HIGH, 30000L);
-
-  int distancia = duracion * 0.034 / 2;
-
-  if (distancia <= 0 || distancia > 400) return 0;
-  return distancia;
+  digitalWrite(trig, LOW);
+  long dur = pulseIn(echo, HIGH, 30000);
+  return (dur == 0) ? 999 : dur * 0.034 / 2;
 }
 
-// ------------------------------------------------------------
-//                 MOVIMIENTOS DEL ROBOT
-// ------------------------------------------------------------
-
-void avanzar() {
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, HIGH);
-  analogWrite(motorIzqEN, velocidadNormal);
-
-  digitalWrite(motorDerIN1, HIGH);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, velocidadNormal);
+void adelante() {
+  digitalWrite(in1, HIGH); digitalWrite(in2, LOW);  analogWrite(enA, 200);
+  digitalWrite(in3, HIGH); digitalWrite(in4, LOW);  analogWrite(enB, 200);
 }
 
-void retroceder() {
-  digitalWrite(motorIzqIN1, HIGH);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, velocidadNormal);
-
-  digitalWrite(motorDerIN1, LOW);
-  digitalWrite(motorDerIN2, HIGH);
-  analogWrite(motorDerEN, velocidadNormal);
+void atras() {
+  digitalWrite(in1, LOW);  digitalWrite(in2, HIGH); analogWrite(enA, 200);
+  digitalWrite(in3, LOW);  digitalWrite(in4, HIGH); analogWrite(enB, 200);
 }
 
-void detener() {
-  digitalWrite(motorIzqIN1, LOW);
-  digitalWrite(motorIzqIN2, LOW);
-  analogWrite(motorIzqEN, 0);
-
-  digitalWrite(motorDerIN1, LOW);
-  digitalWrite(motorDerIN2, LOW);
-  analogWrite(motorDerEN, 0);
+void izquierda() {
+  digitalWrite(in1, LOW);  digitalWrite(in2, HIGH); analogWrite(enA, 180);
+  digitalWrite(in3, HIGH); digitalWrite(in4, LOW);  analogWrite(enB, 180);
 }
 
-// ------------------------------------------------------------
-//            PANTALLA DE INICIO Y MELODÍA
-// ------------------------------------------------------------
-void mostrarPantallaBienvenida() {
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("  ROBOBUS NANO");
-  lcd.setCursor(0,1);
-  lcd.print("  PROYECTO");
+void derecha() {
+  digitalWrite(in1, HIGH); digitalWrite(in2, LOW);  analogWrite(enA, 180);
+  digitalWrite(in3, LOW);  digitalWrite(in4, HIGH); analogWrite(enB, 180);
 }
 
-void melodiaInicio() {
-  int melodia[] = {262,330,392,523,392,330,262};
-  int duracion[] = {150,150,150,300,150,150,300};
- 
-  for(int i=0;i<7;i++){
-    tone(buzzerPin, melodia[i], duracion[i]);
-    delay(duracion[i]+50);
-  }
+void parar() {
+  analogWrite(enA, 0); analogWrite(enB, 0);
+  digitalWrite(buzzer, LOW);
+  digitalWrite(led1, LOW); digitalWrite(led2, LOW);
 }
 </pre> 
   <button class="download-btn-arduino" style="margin-top: 10px; cursor: pointer;" onclick="toggleCodigo(this)">
